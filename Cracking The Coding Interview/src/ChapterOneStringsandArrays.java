@@ -118,6 +118,8 @@ public class ChapterOneStringsandArrays {
 		/*
 		 * While we could use a nested for loop and brute force a solution, its more efficient to use a HashMap which computes in worst case O(n) instead of O(n^2)
 		 * when using nested for loops.
+		 * 
+		 * We can also use a BitStream to do this with an AND compare
 		 */
 		
 		for(int i=0; i<firstProblemString.length(); i++) {
@@ -137,21 +139,141 @@ public class ChapterOneStringsandArrays {
 	
 	public static void problemTwoSolution() {
 		
+		Scanner secondInput = new Scanner(System.in);
+		String secondProblemStringOne = "", secondProblemStringTwo = "";
+		Map<Character, Integer> stringOneMap = new HashMap<>();
+		Map<Character, Integer> stringTwoMap = new HashMap<>();
+		
+		System.out.println("Ok. I'm happy to solve this problem for you.  Please provide me with a string of characters:");
+		secondProblemStringOne = secondInput.nextLine();
+		
+		System.out.println("Yeah, I'm gonna need a second string to do this comparison:");
+		secondProblemStringTwo = secondInput.nextLine();
+		
+		/*
+		 * If the strings are NOT the same length, one cannot be a permutation of the other.
+		 * If they are the same length, we are just going to use another HashMap where the character is the key and the value is the number of times that character is in the string. 
+		 */
+		
+		if(secondProblemStringOne.length() != secondProblemStringTwo.length()) {
+			
+			System.out.println("My analysis has detected that \""+secondProblemStringOne+"\" and \""+secondProblemStringTwo+"\" are of different lengths.  They cannot be permutations of eachother. Sorry.");
+		}
+		else {
+			for(int i=0; i< secondProblemStringOne.length(); i++) {
+				if(stringOneMap.containsKey(secondProblemStringOne.charAt(i))) {
+					stringOneMap.replace(secondProblemStringOne.charAt(i), stringOneMap.get(secondProblemStringOne.charAt(i))+1);
+				}else {
+					stringOneMap.put(secondProblemStringOne.charAt(i), 1);
+				}	
+			}
+			
+			for(int i=0; i< secondProblemStringTwo.length(); i++) {
+				if(stringTwoMap.containsKey(secondProblemStringTwo.charAt(i))) {
+					stringTwoMap.replace(secondProblemStringTwo.charAt(i), stringTwoMap.get(secondProblemStringTwo.charAt(i))+1);
+				}else {
+					stringTwoMap.put(secondProblemStringTwo.charAt(i), 1);
+				}	
+			}
+			
+			/*
+			 * If String 2 has a character that is not in String 1, OR String 1 has a character in String 2, they cannot be permutations of each other.
+			 */
+			
+			for(int i=0;i<secondProblemStringTwo.length();i++) {
+				if(!stringOneMap.containsKey(secondProblemStringTwo.charAt(i)) || !stringTwoMap.containsKey(secondProblemStringOne.charAt(i))) {
+					System.out.println("My analysis indicates that \""+secondProblemStringOne+"\" and \""+secondProblemStringTwo+"\" are not permutations of eachother, since they contain at least one different character. Sorry.");
+					return;
+				}
+			}
+			
+			/*
+			 * Now we just need to determine whether String 1 and String 2 have the same value for each key
+			 */
+			
+			for(Map.Entry<Character, Integer> entry : stringOneMap.entrySet()) {
+				if(stringOneMap.get(entry.getKey()) != stringTwoMap.get(entry.getKey())) {
+					System.out.println("My analysis indicates that \""+secondProblemStringOne+"\" and \""+secondProblemStringTwo+"\" are not permutations of eachother. Sorry.");
+					return;
+				}
+			}
+			
+			System.out.println("My analysis indicates that \""+secondProblemStringOne+"\" and \""+secondProblemStringTwo+"\" ARE permutations of eachother. Good Job!");
+		}
+		
 	}
 	
 	public static void problemThreeSolution() {
 		
+		Scanner thirdInput = new Scanner(System.in);
+		String thirdProblemString= "", replacementString="";
+		
+		System.out.println("I'd be happy to assist you with that.  Please provide me with a string, and I'll replace all spaces with \"%20\":");
+		thirdProblemString = thirdInput.nextLine();
+		
+		for(int i=0;i<thirdProblemString.length();i++) {
+			if(thirdProblemString.charAt(i) == ' ') {
+				replacementString += "%20";
+			}
+			else {
+			
+				replacementString += thirdProblemString.charAt(i);
+			}
+		}
+		
+		System.out.println("Your new string is "+replacementString);
+		
+		return;
 	}
 	
 	public static void problemFourSolution() {
 		
 	}
+	
 	public static void problemFiveSolution() {
 		
 	}
 	
 	public static void problemSixSolution() {
 		
+		Scanner sixthInput = new Scanner(System.in);
+		Map<Character, Integer> characterMap = new HashMap<>();
+		String sixthInputString="", replacementString="";
+		int anyUpdates=0;
+		
+		System.out.println("I'd be happy to help you with that.  Please provide me with a string and I'll compress the string with a counts of repeated characters:");
+		sixthInputString = sixthInput.nextLine();
+		
+		/*
+		 * Similar to an earlier problem. We are going to use a HashMap where the key is the character and the value is the count.
+		 */
+		
+		for(int i=0; i<sixthInputString.length();i++) {
+			if(characterMap.containsKey(sixthInputString.charAt(i))) {
+				characterMap.replace(sixthInputString.charAt(i), characterMap.get(sixthInputString.charAt(i))+1);
+				anyUpdates++;
+			}else {
+				characterMap.put(sixthInputString.charAt(i), 1);
+			}
+		}
+		
+		/*
+		 * Per the problem instructions, if no character is repeated, output the original string
+		 * Otherwise output the compressed string
+		 */
+		if(anyUpdates == 0) {
+			System.out.println("There is no need to compress your string \""+sixthInputString+"\" contains no duplicate characters to compress.");
+			return;
+		}
+		else {
+			for(Map.Entry<Character, Integer> entry : characterMap.entrySet()) {
+			
+			replacementString = replacementString + entry.getKey() + characterMap.get(entry.getKey());
+			}
+		
+			System.out.println("Your brand new concatinated string is: "+replacementString);
+			return;
+		}
 	}
 	
 	public static void problemSevenSolution() {
