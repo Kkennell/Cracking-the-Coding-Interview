@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -232,6 +233,73 @@ public class ChapterOneStringsandArrays {
 	
 	public static void problemFiveSolution() {
 		
+		Scanner fifthInput = new Scanner(System.in);
+		String firstStringCompare="", secondStringCompare="";
+		boolean[] stringOneBits, stringTwoBits;
+		int totalFalse=0;
+		
+		System.out.println("Ok, I can do that. For this problem I'm going to need two strings to compare to eachother. Remeber, the only edits I'm checking for are insertion, deletion, or replacement.");
+		System.out.println("What is the first string you want me to use in the comparison?");
+		
+		firstStringCompare = fifthInput.nextLine();
+		stringOneBits = new boolean[firstStringCompare.length()];
+		
+		for(int i=0;i<firstStringCompare.length();i++) {
+			stringOneBits[i] = false;
+		}
+		
+		System.out.println("Good, I can work with that. Whats the second string?");
+		
+		secondStringCompare = fifthInput.nextLine();
+		stringTwoBits = new boolean[secondStringCompare.length()];
+		
+		for(int i=0;i<secondStringCompare.length();i++) {
+			stringTwoBits[i] = false;
+		}
+		
+		/*
+		 * As an initial matter, if the strings have more than 1 character difference in lengths, they cannot be only 1 edit apart.
+		 * If the strings are the same length, they cannot be an insertion or a removal, only a replacement. Meaning they can only have one substitute character.
+		 * If the strings are 1 character difference, the only possible edits are insertion and deletion.
+		 */
+		
+		if(firstStringCompare.equals(secondStringCompare)) {
+			System.out.println("My analysis is that the two strings are exactly the same! Therefore, they cannot be 1 edit apart.");
+			return;
+		}
+		else if((firstStringCompare.length() - secondStringCompare.length()) > 1 || (secondStringCompare.length() - firstStringCompare.length()) > 1) {
+			
+			System.out.println("These strings cannot be only 1 edit apart due to their relative lengths.");
+			return;
+			
+		}
+		else if(firstStringCompare.length() == secondStringCompare.length()){
+			
+			for(int i=0; i<firstStringCompare.length();i++) {
+				if(firstStringCompare.charAt(i)==secondStringCompare.charAt(i)) {
+					stringOneBits[i]=true;
+				}
+			}
+			for(int i=0;i<firstStringCompare.length();i++) {
+				if(!stringOneBits[i]) {
+					totalFalse++;
+				}
+			}
+			
+			if(totalFalse > 1) {
+				System.out.println("My algorithm has determined that more than one replacement has been made on these strings.  They cannot be 1 edit apart.");
+				return;
+			}
+			else {
+				System.out.println("My algorithm has determined that one replacement has been made on these strings. They are only one edit apart.");
+				return;
+			}
+			
+		}
+		else {
+			
+			
+		}
 	}
 	
 	public static void problemSixSolution() {
@@ -282,10 +350,110 @@ public class ChapterOneStringsandArrays {
 	
 	public static void problemEightSolution() {
 		
+		Scanner eighthInput = new Scanner(System.in);
+		int arraySize=0;
+		int[][] matrix;
+		boolean[] row, column;
+		Random r = new Random();
+		Map<Integer, Integer> matrixMap = new HashMap<>();
+		
+		System.out.println("This is totally a problem that is within my abilities as a computer. First I'm going to need a number from you greater than or equal to 1");
+		System.out.println("This will be the dimensions of the matrix.  So if you chose \"3\" the matrix would be 3x3");
+		System.out.println("Ok, hit me with the number:");
+		
+		arraySize = Integer.parseInt(eighthInput.nextLine());
+		
+		matrix = new int[arraySize][arraySize];
+		row = new boolean[arraySize];
+		column = new boolean[arraySize];
+		
+		/*
+		 * First things first, initialize arrays to FALSE
+		 */
+		
+		for(int i=0; i<arraySize; i++) {
+			row[i] = false;
+			column[i] = false;
+		}
+		
+		/*
+		 * First things first we have to initialize the array
+		 */
+		System.out.println("Ok I have generated the following array for you:");
+		
+		for(int i=0;i<arraySize;i++) {
+			for(int j=0; j<arraySize; j++) {
+				matrix[i][j] = r.nextInt(9);
+				System.out.print(matrix[i][j]);
+				
+				if(!matrixMap.containsKey(matrix[i][j])) {
+					matrixMap.put(matrix[i][j], 1);
+				}
+				
+			}
+			System.out.println();
+		}
+		
+		/*
+		 * First, lets make sure it even has "0" in the array, using the HashMap we created above of course.
+		 */
+		
+		if(!matrixMap.containsKey(0)) {
+			System.out.println("Sorry, my randomly generated matrix doesn't have any \"0\" in it to replace.");
+		}
+		else {
+			
+			/*
+			 * We are going to iterate through the array, if we find a "0" we are going to flag that row and column in row[] and column[]
+			 * We can't just set the row and column to "0" otherwise we will just end up with a full matrix of "0"
+			 */
+			
+			for(int i=0; i<arraySize;i++) {
+				for(int j=0; j<arraySize;j++) {
+					if(matrix[i][j]==0) {
+						
+						row[i]=true;
+						column[j]=true;
+						
+					}
+				}
+			}
+			
+			/*
+			 * At this point, we know which rows and which columns have "0" in them.  Now we can go through and replace the row and the column with "0"
+			 */
+			
+			for(int i=0; i<arraySize; i++) {
+				if(row[i] == true) {
+					for(int j=0; j<arraySize; j++) {
+						matrix[i][j]=0;
+					}
+				}
+				if(column[i]==true) {
+					for(int j=0; j<arraySize; j++) {
+						matrix[j][i]=0;
+					}
+				}
+			}
+			
+			/*
+			 *  Good, now we can display the converted matrix to the user
+			 */
+			
+			System.out.println("Hey! good news! I was able to convert the matrix I randomly generated! Behold my artwork:");
+			
+			for(int i=0;i<arraySize;i++) {
+				for(int j=0; j<arraySize; j++) {
+					System.out.print(matrix[i][j]);
+				}
+				System.out.println();
+			}
+		}
+		
 	}
 
 	public static void problemNineSolution() {
 		
 	}
-
 }
+
