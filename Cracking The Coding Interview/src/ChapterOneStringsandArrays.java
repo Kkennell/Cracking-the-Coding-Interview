@@ -154,6 +154,7 @@ public class ChapterOneStringsandArrays {
 		/*
 		 * If the strings are NOT the same length, one cannot be a permutation of the other.
 		 * If they are the same length, we are just going to use another HashMap where the character is the key and the value is the number of times that character is in the string. 
+		 * Another option is to just sort each string into a character array and run a comparison between arrays. I implemented HashMaps because I wanted to practice with them.
 		 */
 		
 		if(secondProblemStringOne.length() != secondProblemStringTwo.length()) {
